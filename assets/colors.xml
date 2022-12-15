@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="primarySwatch" type="material">#252B5C</color>
+    <color name="primaryColor">#252B5C</color>
+    <color name="darkGrey">#676b8e</color>
+    <color name="lightGrey">#f7f7f9</color>
+    <color name="bgBlue">#6188b1</color>
+    <color name="bgOrange">#e3886a</color>
+</resources>
