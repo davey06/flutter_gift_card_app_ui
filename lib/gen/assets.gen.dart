@@ -14,33 +14,47 @@ import 'package:flutter/services.dart';
 class $AssetsCardGen {
   const $AssetsCardGen();
 
-  /// File path: assets/card/card1.png
-  AssetGenImage get card1 => const AssetGenImage('assets/card/card1.png');
+  /// File path: assets/card/cake-bday.png
+  AssetGenImage get cakeBday =>
+      const AssetGenImage('assets/card/cake-bday.png');
 
-  /// File path: assets/card/card2.png
-  AssetGenImage get card2 => const AssetGenImage('assets/card/card2.png');
+  /// File path: assets/card/doge-xmas.png
+  AssetGenImage get dogeXmas =>
+      const AssetGenImage('assets/card/doge-xmas.png');
 
-  /// File path: assets/card/card3.png
-  AssetGenImage get card3 => const AssetGenImage('assets/card/card3.png');
+  /// File path: assets/card/flower.png
+  AssetGenImage get flower => const AssetGenImage('assets/card/flower.png');
 
-  /// File path: assets/card/card4.png
-  AssetGenImage get card4 => const AssetGenImage('assets/card/card4.png');
+  /// File path: assets/card/gift-happy.png
+  AssetGenImage get giftHappy =>
+      const AssetGenImage('assets/card/gift-happy.png');
 
-  /// File path: assets/card/card5.png
-  AssetGenImage get card5 => const AssetGenImage('assets/card/card5.png');
+  /// File path: assets/card/gift-xmas.png
+  AssetGenImage get giftXmas =>
+      const AssetGenImage('assets/card/gift-xmas.png');
 
-  /// File path: assets/card/card6.png
-  AssetGenImage get card6 => const AssetGenImage('assets/card/card6.png');
+  /// File path: assets/card/happy-bday.png
+  AssetGenImage get happyBday =>
+      const AssetGenImage('assets/card/happy-bday.png');
 
-  /// File path: assets/card/card7.png
-  AssetGenImage get card7 => const AssetGenImage('assets/card/card7.png');
+  /// File path: assets/card/hohoho.png
+  AssetGenImage get hohoho => const AssetGenImage('assets/card/hohoho.png');
 
-  /// File path: assets/card/card8.png
-  AssetGenImage get card8 => const AssetGenImage('assets/card/card8.png');
+  /// File path: assets/card/sock-xmas.png
+  AssetGenImage get sockXmas =>
+      const AssetGenImage('assets/card/sock-xmas.png');
 
   /// List of all assets
-  List<AssetGenImage> get values =>
-      [card1, card2, card3, card4, card5, card6, card7, card8];
+  List<AssetGenImage> get values => [
+        cakeBday,
+        dogeXmas,
+        flower,
+        giftHappy,
+        giftXmas,
+        happyBday,
+        hohoho,
+        sockXmas
+      ];
 }
 
 class $AssetsIconGen {
