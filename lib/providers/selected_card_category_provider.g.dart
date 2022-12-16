@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'selected_card_provider.dart';
+part of 'selected_card_category_provider.dart';
 
 // **************************************************************************
 // RiverpodGenerator
@@ -29,19 +29,20 @@ class _SystemHash {
   }
 }
 
-String $SelectedCardHash() => r'77fbeb246fe3dc7aaa2b524423340cb8d88921fb';
+String $SelectedCategoryHash() => r'9d368b192afe2e18eee1faaa9998a1b610d8e3bb';
 
-/// See also [SelectedCard].
-final selectedCardProvider =
-    AutoDisposeAsyncNotifierProvider<SelectedCard, CardModel>(
-  SelectedCard.new,
-  name: r'selectedCardProvider',
-  debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product') ? null : $SelectedCardHash,
+/// See also [SelectedCategory].
+final selectedCategoryProvider =
+    AutoDisposeNotifierProvider<SelectedCategory, CardCategory?>(
+  SelectedCategory.new,
+  name: r'selectedCategoryProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : $SelectedCategoryHash,
 );
-typedef SelectedCardRef = AutoDisposeAsyncNotifierProviderRef<CardModel>;
+typedef SelectedCategoryRef = AutoDisposeNotifierProviderRef<CardCategory?>;
 
-abstract class _$SelectedCard extends AutoDisposeAsyncNotifier<CardModel> {
+abstract class _$SelectedCategory extends AutoDisposeNotifier<CardCategory?> {
   @override
-  FutureOr<CardModel> build();
+  CardCategory? build();
 }

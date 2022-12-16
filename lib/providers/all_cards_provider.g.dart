@@ -29,7 +29,7 @@ class _SystemHash {
   }
 }
 
-String $allCardsHash() => r'f7b8d38902dffd4055e55267327e28c0212767b2';
+String $allCardsHash() => r'39d1d27a9235a7f5dedcd7437cccda9081822719';
 
 /// See also [allCards].
 final allCardsProvider = AutoDisposeFutureProvider<List<CardModel>>(

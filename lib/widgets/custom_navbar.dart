@@ -16,34 +16,27 @@ class CustomNavBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BottomAppBar(
-      child: Padding(
-        padding: const EdgeInsets.only(top: 10.0, left: 20.0, right: 20.0),
+      child: SizedBox(
+        height: 50,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             _NavBarIcon(
               iconPath: Assets.icon.home.path,
-              onTap: () {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: ((context) => const HomeScreen()),
-                  ),
-                );
-              },
               isSelected: index == 0,
+              onTap: index != 0
+                  ? () {
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: ((context) => const HomeScreen()),
+                        ),
+                      );
+                    }
+                  : null,
             ),
             _NavBarIcon(
               iconPath: Assets.icon.discover.path,
-              isSelected: index == 1,
-              // onTap: () {
-              //   Navigator.pushReplacement(
-              //     context,
-              //     MaterialPageRoute(
-              //       builder: ((context) => MapScreen()),
-              //     ),
-              //   );
-              // },
             ),
             _NavBarIcon(
               iconPath: Assets.icon.gift.path,
@@ -72,7 +65,7 @@ class _NavBarIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final color = isSelected ? ColorName.primaryColor : ColorName.lightGrey;
+    final color = isSelected ? ColorName.primaryColor : ColorName.disabledGrey;
     return InkWell(
       onTap: onTap,
       child: Center(child: SvgPicture.asset(iconPath, color: color)),

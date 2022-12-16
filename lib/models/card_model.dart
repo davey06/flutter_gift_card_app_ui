@@ -4,7 +4,7 @@ class CardModel {
   final String id;
   final String name;
   final String thumbnailPath;
-  final List<String> categories;
+  final List<CardCategory> categories;
 
   const CardModel({
     required this.id,
@@ -18,49 +18,61 @@ class CardModel {
       id: '1',
       name: 'Christmas Doge',
       thumbnailPath: Assets.card.dogeXmas.path,
-      categories: [],
+      categories: [CardCategory.general, CardCategory.christmas],
     ),
     CardModel(
       id: '2',
       name: 'Flowers Bouquet',
       thumbnailPath: Assets.card.flower.path,
-      categories: [],
+      categories: CardCategory.values,
     ),
     CardModel(
       id: '6',
       name: 'Ho Ho Ho',
       thumbnailPath: Assets.card.hohoho.path,
-      categories: [],
+      categories: [CardCategory.general, CardCategory.christmas],
     ),
     CardModel(
       id: '3',
       name: 'Choco Cake',
       thumbnailPath: Assets.card.cakeBday.path,
-      categories: [],
+      categories: [CardCategory.general, CardCategory.birthday],
     ),
     CardModel(
       id: '4',
       name: 'Happy Birthday',
       thumbnailPath: Assets.card.happyBday.path,
-      categories: [],
+      categories: [CardCategory.general, CardCategory.birthday],
     ),
     CardModel(
       id: '7',
       name: 'Giving Season',
       thumbnailPath: Assets.card.giftXmas.path,
-      categories: [],
+      categories: [CardCategory.general, CardCategory.christmas],
     ),
     CardModel(
       id: '5',
       name: 'Birthday Gift',
       thumbnailPath: Assets.card.giftHappy.path,
-      categories: [],
+      categories: [CardCategory.general, CardCategory.birthday],
     ),
     CardModel(
       id: '8',
       name: 'Holly Jolly Socks',
       thumbnailPath: Assets.card.sockXmas.path,
-      categories: [],
+      categories: [CardCategory.general, CardCategory.christmas],
     ),
   ];
+}
+
+enum CardCategory {
+  birthday,
+  christmas,
+  general,
+  congratulation,
+}
+
+extension CardCategoryExtention on CardCategory {
+  String capitalName() =>
+      name[0].toUpperCase() + name.substring(1, name.length).toLowerCase();
 }

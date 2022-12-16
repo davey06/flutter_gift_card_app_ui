@@ -13,6 +13,7 @@ class SelectedCard extends _$SelectedCard {
   }
 
   void setSelectedCard(String cardId) async {
+    state = const AsyncValue.loading();
     final cardRepository = ref.watch(cardRepositoryProvider);
     state = AsyncValue.data(
       await cardRepository.getCard(cardId),
