@@ -19,11 +19,13 @@ class CustomGiftCard extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Image.asset(
-          model.thumbnailPath,
-          width: width,
-          height: height,
-          fit: BoxFit.fitWidth,
+        Flexible(
+          child: Image.asset(
+            model.thumbnailPath,
+            width: width,
+            height: height,
+            fit: BoxFit.fitWidth,
+          ),
         ),
         if (showLabel) ...[
           const SizedBox(height: 8),

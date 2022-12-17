@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'all_cards_provider.dart';
+part of 'selected_gift_amount_provider.dart';
 
 // **************************************************************************
 // RiverpodGenerator
@@ -29,13 +29,20 @@ class _SystemHash {
   }
 }
 
-String $allCardsHash() => r'12a7ac2aaf0aa1566ad661263172dc73a9d4b6d1';
+String $SelectedGiftAmountHash() => r'079094a843ab98e468adb4ecdcc79b7a13640ff5';
 
-/// See also [allCards].
-final allCardsProvider = AutoDisposeFutureProvider<List<CardModel>>(
-  allCards,
-  name: r'allCardsProvider',
-  debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product') ? null : $allCardsHash,
+/// See also [SelectedGiftAmount].
+final selectedGiftAmountProvider =
+    AutoDisposeNotifierProvider<SelectedGiftAmount, int?>(
+  SelectedGiftAmount.new,
+  name: r'selectedGiftAmountProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : $SelectedGiftAmountHash,
 );
-typedef AllCardsRef = AutoDisposeFutureProviderRef<List<CardModel>>;
+typedef SelectedGiftAmountRef = AutoDisposeNotifierProviderRef<int?>;
+
+abstract class _$SelectedGiftAmount extends AutoDisposeNotifier<int?> {
+  @override
+  int? build();
+}

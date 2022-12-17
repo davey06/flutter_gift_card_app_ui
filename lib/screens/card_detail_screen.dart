@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_card_app_ui/gen/assets.gen.dart';
 import 'package:flutter_card_app_ui/providers/selected_card_provider.dart';
+import 'package:flutter_card_app_ui/providers/selected_gift_amount_provider.dart';
 import 'package:flutter_card_app_ui/utilities/app_text.dart';
+import 'package:flutter_card_app_ui/utilities/constant.dart';
+import 'package:flutter_card_app_ui/widgets/custom_chip_widget.dart';
 import 'package:flutter_card_app_ui/widgets/custom_gift_card_widget.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -46,14 +49,15 @@ class CardDetailScreen extends ConsumerWidget {
           ),
         ),
       ),
-      body: selectedCard.when(
-          data: (card) => Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Flexible(
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Row(
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Flexible(
+            child: Container(
+              height: size.height / 2,
+              padding: const EdgeInsets.all(16.0).copyWith(bottom: 0),
+              child: selectedCard.when(
+                  data: (card) => Row(
                         children: [
                           GestureDetector(
                             onTap: () {
@@ -71,7 +75,8 @@ class CardDetailScreen extends ConsumerWidget {
                                   BoxShadow(
                                       color: Colors.black26, //New
                                       blurRadius: 5.0,
-                                      offset: Offset(5, 5)),
+                                      spreadRadius: 2,
+                                      offset: Offset(3, 3)),
                                 ],
                               ),
                               child: CustomGiftCard(
@@ -90,21 +95,115 @@ class CardDetailScreen extends ConsumerWidget {
                           ),
                         ],
                       ),
-                    ),
-                  ),
-                  Container(
-                    color: Colors.white,
-                    width: double.infinity,
-                    height: size.height / 4,
-                  )
-                ],
+                  error: (e, s) => Center(
+                        child: AppText.medium("Card not found: $e"),
+                      ),
+                  loading: () => const Center(
+                        child: CircularProgressIndicator(),
+                      )),
+            ),
+          ),
+          const _CustomizeButton(),
+          _GiftAmountSection(height: size.height / 3.5),
+        ],
+      ),
+    );
+  }
+}
+
+class _GiftAmountSection extends ConsumerWidget {
+  final double? height;
+  const _GiftAmountSection({this.height, Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final selectedAmount = ref.watch(selectedGiftAmountProvider);
+    final isAmountSelected = selectedAmount != null;
+
+    return Container(
+      padding: const EdgeInsets.only(bottom: 10),
+      color: Colors.white,
+      width: double.infinity,
+      height: height,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          AppText.medium(
+            "Select Amount",
+            fontWeight: FontWeight.w900,
+            fontSize: 16,
+          ),
+          SizedBox(
+            height: 50,
+            child: ListView(
+                shrinkWrap: true,
+                scrollDirection: Axis.horizontal,
+                children: [
+                  const SizedBox(width: 24),
+                  ...giftValue
+                      .map((value) => CustomChips(
+                            label: value.toDollar(),
+                            isSelected: selectedAmount == value,
+                            customFocusColor: Colors.black87,
+                            labelFontSize: 16,
+                            onTap: () {
+                              ref
+                                  .read(selectedGiftAmountProvider.notifier)
+                                  .setSelectedAmount(value);
+                            },
+                          ))
+                      .toList(growable: false),
+                  const SizedBox(width: 24),
+                ]),
+          ),
+          GestureDetector(
+            onTap: isAmountSelected ? () {} : null,
+            child: Container(
+              margin: const EdgeInsets.symmetric(horizontal: 24),
+              width: double.infinity,
+              height: 50,
+              decoration: BoxDecoration(
+                color: isAmountSelected ? Colors.black87 : Colors.grey,
+                borderRadius: BorderRadius.circular(40),
               ),
-          error: (e, s) => Center(
-                child: AppText.medium("Card not found: $e"),
+              child: Center(
+                child: AppText.medium(
+                  'Continue',
+                  color: Colors.white,
+                ),
               ),
-          loading: () => const Center(
-                child: CircularProgressIndicator(),
-              )),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _CustomizeButton extends StatelessWidget {
+  const _CustomizeButton({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+      decoration: BoxDecoration(
+        color: Colors.black38,
+        borderRadius: BorderRadius.circular(40),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Assets.icon.color.svg(color: Colors.white, height: 16),
+          const SizedBox(width: 12),
+          AppText.small(
+            'Customize',
+            color: Colors.white,
+            letterSpacing: 1,
+          )
+        ],
+      ),
     );
   }
 }

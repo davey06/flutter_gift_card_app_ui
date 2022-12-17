@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_card_app_ui/gen/colors.gen.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 
-class CustomSearchBar extends HookWidget {
+class CustomSearchBar extends StatelessWidget {
   const CustomSearchBar({
     this.prefixIcon,
     this.suffixIcon,
@@ -18,7 +17,6 @@ class CustomSearchBar extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final searchTextController = useTextEditingController();
     final leadingWidget = prefixIcon;
     final endingWidget = suffixIcon;
 

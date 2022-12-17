@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_card_app_ui/gen/assets.gen.dart';
-import 'package:flutter_card_app_ui/models/card_model.dart';
 import 'package:flutter_card_app_ui/providers/all_cards_provider.dart';
 import 'package:flutter_card_app_ui/providers/search_query_provider.dart';
 import 'package:flutter_card_app_ui/providers/selected_card_category_provider.dart';
 import 'package:flutter_card_app_ui/screens/card_detail_screen.dart';
 import 'package:flutter_card_app_ui/utilities/app_text.dart';
+import 'package:flutter_card_app_ui/utilities/constant.dart';
 import 'package:flutter_card_app_ui/widgets/custom_chip_widget.dart';
 import 'package:flutter_card_app_ui/widgets/custom_gift_card_widget.dart';
 import 'package:flutter_card_app_ui/widgets/custom_navbar.dart';

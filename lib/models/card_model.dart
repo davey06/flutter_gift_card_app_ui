@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter_card_app_ui/gen/assets.gen.dart';
 import 'package:flutter_card_app_ui/gen/colors.gen.dart';
+import 'package:flutter_card_app_ui/utilities/constant.dart';
 
 class CardModel {
   final int id;
@@ -80,16 +81,4 @@ class CardModel {
       bgColor: ColorName.bgBlue,
     ),
   ];
-}
-
-enum CardCategory {
-  birthday,
-  christmas,
-  general,
-  congratulation,
-}
-
-extension CardCategoryExtention on CardCategory {
-  String capitalName() =>
-      name[0].toUpperCase() + name.substring(1, name.length).toLowerCase();
 }
