@@ -3,9 +3,10 @@ import 'package:flutter_card_app_ui/gen/assets.gen.dart';
 import 'package:flutter_card_app_ui/models/card_model.dart';
 import 'package:flutter_card_app_ui/providers/all_cards_provider.dart';
 import 'package:flutter_card_app_ui/providers/selected_card_category_provider.dart';
+import 'package:flutter_card_app_ui/screens/card_detail_screen.dart';
 import 'package:flutter_card_app_ui/utilities/app_text.dart';
 import 'package:flutter_card_app_ui/widgets/custom_chip_widget.dart';
-import 'package:flutter_card_app_ui/widgets/custom_giff_card_widget.dart';
+import 'package:flutter_card_app_ui/widgets/custom_gift_card_widget.dart';
 import 'package:flutter_card_app_ui/widgets/custom_navbar.dart';
 import 'package:flutter_card_app_ui/widgets/custom_search_bar_widget.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -78,8 +79,20 @@ class _BodyContent extends ConsumerWidget {
             runSpacing: 16,
             direction: Axis.horizontal,
             children: cards
-                .map((card) => CustomGiftCard(
-                      model: card,
+                .map((card) => GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: ((context) => CardDetailScreen(
+                                    cardId: card.id,
+                                  )),
+                            ));
+                      },
+                      child: CustomGiftCard(
+                        model: card,
+                        width: size.width / 2 - 24,
+                      ),
                     ))
                 .toList(growable: false),
           ),

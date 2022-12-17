@@ -16,7 +16,7 @@ class CardRepository {
     );
   }
 
-  Future<CardModel> getCard(String modelId) async {
+  Future<CardModel> getCard(int modelId) async {
     return Future.delayed(
       const Duration(milliseconds: 500),
       () {

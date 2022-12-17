@@ -5,13 +5,19 @@ import 'package:flutter_card_app_ui/utilities/app_text.dart';
 class CustomGiftCard extends StatelessWidget {
   final CardModel model;
   final double width;
-  final double height;
+  final double? height;
+  final bool showLabel;
   const CustomGiftCard(
-      {required this.model, this.width = 150, this.height = 200, super.key});
+      {required this.model,
+      this.width = 150,
+      this.height,
+      this.showLabel = true,
+      super.key});
 
   @override
   Widget build(BuildContext context) {
     return Column(
+      mainAxisSize: MainAxisSize.min,
       children: [
         Image.asset(
           model.thumbnailPath,
@@ -19,8 +25,10 @@ class CustomGiftCard extends StatelessWidget {
           height: height,
           fit: BoxFit.fitWidth,
         ),
-        const SizedBox(height: 8),
-        AppText.medium(model.name),
+        if (showLabel) ...[
+          const SizedBox(height: 8),
+          AppText.medium(model.name),
+        ]
       ],
     );
   }
