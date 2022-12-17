@@ -29,7 +29,7 @@ class _SystemHash {
   }
 }
 
-String $SelectedCardHash() => r'cf709f21a2822a41f3e82f730dfcbf8df5d14d6d';
+String $SelectedCardHash() => r'77f5b10eb7f8a99ec21f7585f22b45d3a0962b4f';
 
 /// See also [SelectedCard].
 class SelectedCardProvider

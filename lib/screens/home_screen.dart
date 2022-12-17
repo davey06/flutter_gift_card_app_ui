@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_card_app_ui/gen/assets.gen.dart';
 import 'package:flutter_card_app_ui/models/card_model.dart';
 import 'package:flutter_card_app_ui/providers/all_cards_provider.dart';
+import 'package:flutter_card_app_ui/providers/search_query_provider.dart';
 import 'package:flutter_card_app_ui/providers/selected_card_category_provider.dart';
 import 'package:flutter_card_app_ui/screens/card_detail_screen.dart';
 import 'package:flutter_card_app_ui/utilities/app_text.dart';
@@ -39,11 +40,11 @@ class HomeScreen extends StatelessWidget {
   }
 }
 
-class _HeaderSearch extends StatelessWidget {
+class _HeaderSearch extends ConsumerWidget {
   const _HeaderSearch({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Padding(
       padding: const EdgeInsets.all(24.0).copyWith(bottom: 12),
       child: Column(
@@ -55,7 +56,7 @@ class _HeaderSearch extends StatelessWidget {
           CustomSearchBar(
             prefixIcon: Assets.icon.search.svg(),
             placeholder: 'search card..',
-            onChange: (text) {},
+            onChange: ref.read(searchQueryProvider.notifier).onChange,
           ),
         ],
       ),
@@ -72,30 +73,37 @@ class _BodyContent extends ConsumerWidget {
     final cards = ref.watch(allCardsProvider);
 
     return Padding(
-        padding: const EdgeInsets.all(16).copyWith(top: 8),
+        padding: const EdgeInsets.all(20).copyWith(top: 8),
         child: cards.when(
-          data: (cards) => Wrap(
-            spacing: 16,
-            runSpacing: 16,
-            direction: Axis.horizontal,
-            children: cards
-                .map((card) => GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: ((context) => CardDetailScreen(
-                                    cardId: card.id,
-                                  )),
-                            ));
-                      },
-                      child: CustomGiftCard(
-                        model: card,
-                        width: size.width / 2 - 24,
-                      ),
-                    ))
-                .toList(growable: false),
-          ),
+          data: (cards) => cards.isNotEmpty
+              ? Wrap(
+                  spacing: 16,
+                  runSpacing: 16,
+                  direction: Axis.horizontal,
+                  children: cards
+                      .map((card) => GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: ((context) => CardDetailScreen(
+                                          cardId: card.id,
+                                        )),
+                                  ));
+                            },
+                            child: CustomGiftCard(
+                              model: card,
+                              width: size.width / 2 - 40,
+                            ),
+                          ))
+                      .toList(growable: false),
+                )
+              : Padding(
+                  padding: EdgeInsets.only(top: size.height / 3),
+                  child: Center(
+                    child: AppText.medium('Card not found'),
+                  ),
+                ),
           error: (e, s) => Center(
             child: AppText.medium('failed to fetch card'),
           ),
