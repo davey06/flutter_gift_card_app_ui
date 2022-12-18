@@ -18,6 +18,7 @@ class CardDetailScreen extends ConsumerWidget {
     final selectedCard = ref.watch(SelectedCardProvider(cardId));
     final selectedCardNotifier =
         ref.read(SelectedCardProvider(cardId).notifier);
+    final selectedGiftAmount = ref.watch(selectedGiftAmountProvider);
 
     return Scaffold(
       backgroundColor: selectedCard.value?.bgColor,
@@ -79,10 +80,21 @@ class CardDetailScreen extends ConsumerWidget {
                                       offset: Offset(3, 3)),
                                 ],
                               ),
-                              child: CustomGiftCard(
-                                model: card,
-                                width: size.width - 50,
-                                showLabel: false,
+                              child: Stack(
+                                children: [
+                                  CustomGiftCard(
+                                    model: card,
+                                    width: size.width - 50,
+                                    showLabel: false,
+                                  ),
+                                  if (selectedGiftAmount != null)
+                                    Align(
+                                      alignment: Alignment.bottomCenter,
+                                      child: _GiftStamp(
+                                        value: selectedGiftAmount,
+                                      ),
+                                    )
+                                ],
                               ),
                             ),
                           ),
@@ -105,6 +117,34 @@ class CardDetailScreen extends ConsumerWidget {
           ),
           const _CustomizeButton(),
           _GiftAmountSection(height: size.height / 3.5),
+        ],
+      ),
+    );
+  }
+}
+
+class _GiftStamp extends StatelessWidget {
+  final int value;
+  const _GiftStamp({required this.value, Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          AppText.title(
+            'USD',
+            color: Colors.white,
+            fontSize: 20,
+          ),
+          AppText.title(
+            value.toDollar(),
+            color: Colors.white,
+            fontSize: 30,
+          ),
         ],
       ),
     );
