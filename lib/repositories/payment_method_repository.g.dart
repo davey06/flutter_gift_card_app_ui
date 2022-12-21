@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'selected_card_provider.dart';
+part of 'payment_method_repository.dart';
 
 // **************************************************************************
 // RiverpodGenerator
@@ -29,36 +29,17 @@ class _SystemHash {
   }
 }
 
-String $SelectedCardHash() => r'394a80cb091502dad288c9dcad8b4b2d4648c832';
+String $paymentMethodRepositoryHash() =>
+    r'6548c61bdbbc8506b9268fc70b992fad3943f90e';
 
-/// See also [SelectedCard].
-final selectedCardProvider =
-    AutoDisposeAsyncNotifierProvider<SelectedCard, CardModel>(
-  SelectedCard.new,
-  name: r'selectedCardProvider',
-  debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product') ? null : $SelectedCardHash,
-);
-typedef SelectedCardRef = AutoDisposeAsyncNotifierProviderRef<CardModel>;
-
-abstract class _$SelectedCard extends AutoDisposeAsyncNotifier<CardModel> {
-  @override
-  FutureOr<CardModel> build();
-}
-
-String $SelectedCardIdHash() => r'2ec71341b7c1dcd494209db7970e4423f6bf7700';
-
-/// See also [SelectedCardId].
-final selectedCardIdProvider = AutoDisposeNotifierProvider<SelectedCardId, int>(
-  SelectedCardId.new,
-  name: r'selectedCardIdProvider',
+/// See also [paymentMethodRepository].
+final paymentMethodRepositoryProvider =
+    AutoDisposeProvider<PaymentMethodRepository>(
+  paymentMethodRepository,
+  name: r'paymentMethodRepositoryProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
-      : $SelectedCardIdHash,
+      : $paymentMethodRepositoryHash,
 );
-typedef SelectedCardIdRef = AutoDisposeNotifierProviderRef<int>;
-
-abstract class _$SelectedCardId extends AutoDisposeNotifier<int> {
-  @override
-  int build();
-}
+typedef PaymentMethodRepositoryRef
+    = AutoDisposeProviderRef<PaymentMethodRepository>;

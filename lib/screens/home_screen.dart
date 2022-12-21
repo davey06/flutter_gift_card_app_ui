@@ -3,7 +3,7 @@ import 'package:flutter_card_app_ui/gen/assets.gen.dart';
 import 'package:flutter_card_app_ui/providers/all_cards_provider.dart';
 import 'package:flutter_card_app_ui/providers/search_query_provider.dart';
 import 'package:flutter_card_app_ui/providers/selected_card_category_provider.dart';
-import 'package:flutter_card_app_ui/screens/card_detail_screen.dart';
+import 'package:flutter_card_app_ui/providers/selected_card_provider.dart';
 import 'package:flutter_card_app_ui/utilities/app_text.dart';
 import 'package:flutter_card_app_ui/utilities/constant.dart';
 import 'package:flutter_card_app_ui/widgets/custom_chip_widget.dart';
@@ -11,6 +11,8 @@ import 'package:flutter_card_app_ui/widgets/custom_gift_card_widget.dart';
 import 'package:flutter_card_app_ui/widgets/custom_navbar.dart';
 import 'package:flutter_card_app_ui/widgets/custom_search_bar_widget.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+
+import 'card_detail_select_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -72,6 +74,9 @@ class _BodyContent extends ConsumerWidget {
     final size = MediaQuery.of(context).size;
     final cards = ref.watch(allCardsProvider);
 
+    //init card id provider
+    ref.watch(selectedCardIdProvider);
+
     return Padding(
         padding: const EdgeInsets.all(20).copyWith(top: 8),
         child: cards.when(
@@ -83,6 +88,9 @@ class _BodyContent extends ConsumerWidget {
                   children: cards
                       .map((card) => GestureDetector(
                             onTap: () {
+                              ref
+                                  .read(selectedCardIdProvider.notifier)
+                                  .setSelectedCardId(card.id);
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(

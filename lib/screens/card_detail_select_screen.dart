@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_card_app_ui/gen/assets.gen.dart';
+import 'package:flutter_card_app_ui/models/card_model.dart';
 import 'package:flutter_card_app_ui/providers/selected_card_provider.dart';
 import 'package:flutter_card_app_ui/providers/selected_gift_amount_provider.dart';
+import 'package:flutter_card_app_ui/screens/card_detail_input_data_screen.dart';
 import 'package:flutter_card_app_ui/utilities/app_text.dart';
 import 'package:flutter_card_app_ui/utilities/constant.dart';
 import 'package:flutter_card_app_ui/widgets/custom_chip_widget.dart';
@@ -14,10 +16,9 @@ class CardDetailScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final selectedCard = ref.watch(selectedCardProvider);
     final size = MediaQuery.of(context).size;
-    final selectedCard = ref.watch(SelectedCardProvider(cardId));
-    final selectedCardNotifier =
-        ref.read(SelectedCardProvider(cardId).notifier);
+    final selectedCardNotifier = ref.read(selectedCardProvider.notifier);
     final selectedGiftAmount = ref.watch(selectedGiftAmountProvider);
 
     return Scaffold(
@@ -116,34 +117,10 @@ class CardDetailScreen extends ConsumerWidget {
             ),
           ),
           const _CustomizeButton(),
-          _GiftAmountSection(height: size.height / 3.5),
-        ],
-      ),
-    );
-  }
-}
-
-class _GiftStamp extends StatelessWidget {
-  final int value;
-  const _GiftStamp({required this.value, Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: [
-          AppText.title(
-            'USD',
-            color: Colors.white,
-            fontSize: 20,
-          ),
-          AppText.title(
-            value.toDollar(),
-            color: Colors.white,
-            fontSize: 30,
+          Hero(
+            tag: "BottomSheet",
+            child: _GiftAmountSection(
+                model: selectedCard.value, height: size.height / 3.5),
           ),
         ],
       ),
@@ -152,13 +129,16 @@ class _GiftStamp extends StatelessWidget {
 }
 
 class _GiftAmountSection extends ConsumerWidget {
+  final CardModel? model;
   final double? height;
-  const _GiftAmountSection({this.height, Key? key}) : super(key: key);
+  const _GiftAmountSection({required this.model, this.height, Key? key})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final selectedAmount = ref.watch(selectedGiftAmountProvider);
     final isAmountSelected = selectedAmount != null;
+    final selectedCard = model;
 
     return Container(
       padding: const EdgeInsets.only(bottom: 10),
@@ -198,7 +178,19 @@ class _GiftAmountSection extends ConsumerWidget {
                 ]),
           ),
           GestureDetector(
-            onTap: isAmountSelected ? () {} : null,
+            onTap: isAmountSelected && selectedCard != null
+                ? () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: ((context) => CardDetailInputScreen(
+                              model: selectedCard,
+                              giftAmount: selectedAmount,
+                            )),
+                      ),
+                    );
+                  }
+                : null,
             child: Container(
               margin: const EdgeInsets.symmetric(horizontal: 24),
               width: double.infinity,
@@ -242,6 +234,34 @@ class _CustomizeButton extends StatelessWidget {
             color: Colors.white,
             letterSpacing: 1,
           )
+        ],
+      ),
+    );
+  }
+}
+
+class _GiftStamp extends StatelessWidget {
+  final int value;
+  const _GiftStamp({required this.value, Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          AppText.title(
+            'USD',
+            color: Colors.white,
+            fontSize: 20,
+          ),
+          AppText.title(
+            value.toDollar(),
+            color: Colors.white,
+            fontSize: 30,
+          ),
         ],
       ),
     );
