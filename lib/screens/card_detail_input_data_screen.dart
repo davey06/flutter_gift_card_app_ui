@@ -4,7 +4,6 @@ import 'package:flutter_card_app_ui/gen/colors.gen.dart';
 import 'package:flutter_card_app_ui/models/card_model.dart';
 import 'package:flutter_card_app_ui/models/payment_option_model.dart';
 import 'package:flutter_card_app_ui/providers/all_payment_method_provider.dart';
-import 'package:flutter_card_app_ui/providers/selected_gift_amount_provider.dart';
 import 'package:flutter_card_app_ui/providers/selected_payment_method_provider.dart';
 import 'package:flutter_card_app_ui/utilities/app_text.dart';
 import 'package:flutter_card_app_ui/utilities/constant.dart';
@@ -12,6 +11,8 @@ import 'package:flutter_card_app_ui/widgets/custom_gift_card_widget.dart';
 import 'package:flutter_card_app_ui/widgets/custom_label_textfield_widget.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+
+import 'card_detail_purchased_screen.dart';
 
 class CardDetailInputScreen extends StatelessWidget {
   static const route = 'card_detail/input';
@@ -107,9 +108,6 @@ class _GiftRecipientSection extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final selectedAmount = ref.watch(selectedGiftAmountProvider);
-    final isAmountSelected = selectedAmount != null;
-
     return Container(
       padding: const EdgeInsets.only(left: 24, right: 24, top: 16, bottom: 10),
       decoration: const BoxDecoration(
@@ -135,12 +133,19 @@ class _GiftRecipientSection extends ConsumerWidget {
             const _PaymentMethods(),
             const SizedBox(height: 32),
             GestureDetector(
-              onTap: isAmountSelected ? () {} : null,
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: ((context) => const CardPurchasedScreen()),
+                  ),
+                );
+              },
               child: Container(
                 width: double.infinity,
                 height: 50,
                 decoration: BoxDecoration(
-                  color: isAmountSelected ? Colors.black87 : Colors.grey,
+                  color: Colors.black87,
                   borderRadius: BorderRadius.circular(40),
                 ),
                 child: Center(
@@ -231,21 +236,26 @@ class _PaymentOption extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      contentPadding: const EdgeInsets.all(0),
-      leading: Radio<PaymentOption>(
-          value: option, groupValue: selectedOption, onChanged: onChange),
-      title: Row(
-        children: [
-          SvgPicture.asset(option.iconUrl),
-          const SizedBox(width: 8),
-          AppText.medium(
-            option.type == PaymentOptionType.creditCard
-                ? option.number.toString()
-                : option.name,
-            fontWeight: FontWeight.normal,
-          ),
-        ],
+    return GestureDetector(
+      onTap: () {
+        onChange(option);
+      },
+      child: ListTile(
+        contentPadding: const EdgeInsets.all(0),
+        leading: Radio<PaymentOption>(
+            value: option, groupValue: selectedOption, onChanged: onChange),
+        title: Row(
+          children: [
+            SvgPicture.asset(option.iconUrl),
+            const SizedBox(width: 12),
+            AppText.medium(
+              option.type == PaymentOptionType.creditCard
+                  ? option.number.toString()
+                  : option.name,
+              fontWeight: FontWeight.normal,
+            ),
+          ],
+        ),
       ),
     );
   }

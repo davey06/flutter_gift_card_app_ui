@@ -6,6 +6,7 @@ import 'package:flutter_card_app_ui/providers/selected_gift_amount_provider.dart
 import 'package:flutter_card_app_ui/screens/card_detail_input_data_screen.dart';
 import 'package:flutter_card_app_ui/utilities/app_text.dart';
 import 'package:flutter_card_app_ui/utilities/constant.dart';
+import 'package:flutter_card_app_ui/widgets/custom_card_stamp_widget.dart';
 import 'package:flutter_card_app_ui/widgets/custom_chip_widget.dart';
 import 'package:flutter_card_app_ui/widgets/custom_gift_card_widget.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -91,9 +92,8 @@ class CardDetailScreen extends ConsumerWidget {
                                   if (selectedGiftAmount != null)
                                     Align(
                                       alignment: Alignment.bottomCenter,
-                                      child: _GiftStamp(
-                                        value: selectedGiftAmount,
-                                      ),
+                                      child: CustomCardStamp(
+                                          value: selectedGiftAmount),
                                     )
                                 ],
                               ),
@@ -234,34 +234,6 @@ class _CustomizeButton extends StatelessWidget {
             color: Colors.white,
             letterSpacing: 1,
           )
-        ],
-      ),
-    );
-  }
-}
-
-class _GiftStamp extends StatelessWidget {
-  final int value;
-  const _GiftStamp({required this.value, Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: [
-          AppText.title(
-            'USD',
-            color: Colors.white,
-            fontSize: 20,
-          ),
-          AppText.title(
-            value.toDollar(),
-            color: Colors.white,
-            fontSize: 30,
-          ),
         ],
       ),
     );
