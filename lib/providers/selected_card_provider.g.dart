@@ -29,89 +29,36 @@ class _SystemHash {
   }
 }
 
-String $SelectedCardHash() => r'77f5b10eb7f8a99ec21f7585f22b45d3a0962b4f';
+String $SelectedCardHash() => r'394a80cb091502dad288c9dcad8b4b2d4648c832';
 
 /// See also [SelectedCard].
-class SelectedCardProvider
-    extends AutoDisposeAsyncNotifierProviderImpl<SelectedCard, CardModel> {
-  SelectedCardProvider(
-    this.cardId,
-  ) : super(
-          () => SelectedCard()..cardId = cardId,
-          from: selectedCardProvider,
-          name: r'selectedCardProvider',
-          debugGetCreateSourceHash:
-              const bool.fromEnvironment('dart.vm.product')
-                  ? null
-                  : $SelectedCardHash,
-        );
-
-  final int cardId;
-
-  @override
-  bool operator ==(Object other) {
-    return other is SelectedCardProvider && other.cardId == cardId;
-  }
-
-  @override
-  int get hashCode {
-    var hash = _SystemHash.combine(0, runtimeType.hashCode);
-    hash = _SystemHash.combine(hash, cardId.hashCode);
-
-    return _SystemHash.finish(hash);
-  }
-
-  @override
-  FutureOr<CardModel> runNotifierBuild(
-    covariant _$SelectedCard notifier,
-  ) {
-    return notifier.build(
-      cardId,
-    );
-  }
-}
-
+final selectedCardProvider =
+    AutoDisposeAsyncNotifierProvider<SelectedCard, CardModel>(
+  SelectedCard.new,
+  name: r'selectedCardProvider',
+  debugGetCreateSourceHash:
+      const bool.fromEnvironment('dart.vm.product') ? null : $SelectedCardHash,
+);
 typedef SelectedCardRef = AutoDisposeAsyncNotifierProviderRef<CardModel>;
 
-/// See also [SelectedCard].
-final selectedCardProvider = SelectedCardFamily();
-
-class SelectedCardFamily extends Family<AsyncValue<CardModel>> {
-  SelectedCardFamily();
-
-  SelectedCardProvider call(
-    int cardId,
-  ) {
-    return SelectedCardProvider(
-      cardId,
-    );
-  }
-
+abstract class _$SelectedCard extends AutoDisposeAsyncNotifier<CardModel> {
   @override
-  AutoDisposeAsyncNotifierProviderImpl<SelectedCard, CardModel>
-      getProviderOverride(
-    covariant SelectedCardProvider provider,
-  ) {
-    return call(
-      provider.cardId,
-    );
-  }
-
-  @override
-  List<ProviderOrFamily>? get allTransitiveDependencies => null;
-
-  @override
-  List<ProviderOrFamily>? get dependencies => null;
-
-  @override
-  String? get name => r'selectedCardProvider';
+  FutureOr<CardModel> build();
 }
 
-abstract class _$SelectedCard
-    extends BuildlessAutoDisposeAsyncNotifier<CardModel> {
-  late final int cardId;
+String $SelectedCardIdHash() => r'2ec71341b7c1dcd494209db7970e4423f6bf7700';
 
-  FutureOr<CardModel> build(
-    int cardId,
-  );
+/// See also [SelectedCardId].
+final selectedCardIdProvider = AutoDisposeNotifierProvider<SelectedCardId, int>(
+  SelectedCardId.new,
+  name: r'selectedCardIdProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : $SelectedCardIdHash,
+);
+typedef SelectedCardIdRef = AutoDisposeNotifierProviderRef<int>;
+
+abstract class _$SelectedCardId extends AutoDisposeNotifier<int> {
+  @override
+  int build();
 }
