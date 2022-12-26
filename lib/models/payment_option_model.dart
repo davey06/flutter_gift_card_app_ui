@@ -1,5 +1,10 @@
 import 'package:flutter_card_app_ui/gen/assets.gen.dart';
 
+enum PaymentOptionType {
+  creditCard,
+  digitalWallet,
+}
+
 class PaymentOption {
   final String name;
   final int? number;
@@ -26,9 +31,4 @@ class PaymentOption {
       iconUrl: Assets.icon.paypal.path,
     ),
   ];
-}
-
-enum PaymentOptionType {
-  creditCard,
-  digitalWallet,
 }

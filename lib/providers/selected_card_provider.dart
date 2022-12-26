@@ -1,6 +1,7 @@
-import 'package:flutter_card_app_ui/models/card_model.dart';
-import 'package:flutter_card_app_ui/repositories/card_repository.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+
+import '../models/card_model.dart';
+import '../repositories/card_repository.dart';
 
 part 'selected_card_provider.g.dart';
 
@@ -17,14 +18,6 @@ class SelectedCard extends _$SelectedCard {
 
     return await cardRepository.getCard(cardId);
   }
-
-  // Future<void> setSelectedCard(int cardId) async {
-  //   state = const AsyncValue.loading();
-  //   final cardRepository = ref.watch(cardRepositoryProvider);
-  //   state = AsyncValue.data(
-  //     await cardRepository.getCard(cardId),
-  //   );
-  // }
 
   void nextCard() {
     ref.read(selectedCardIdProvider.notifier).setSelectedCardId(

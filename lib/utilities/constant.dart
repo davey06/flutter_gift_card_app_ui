@@ -1,11 +1,4 @@
-const giftValue = [50, 100, 200, 500, 1000];
-
-enum CardCategory {
-  birthday,
-  christmas,
-  general,
-  congratulation,
-}
+import '../models/card_model.dart';
 
 extension CardCategoryExtention on CardCategory {
   String capitalName() =>

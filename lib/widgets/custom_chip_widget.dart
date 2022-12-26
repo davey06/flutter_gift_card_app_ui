@@ -1,43 +1,41 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_card_app_ui/gen/colors.gen.dart';
-import 'package:flutter_card_app_ui/utilities/app_text.dart';
+
+import '../gen/colors.gen.dart';
+import '../utilities/app_text.dart';
 
 class CustomChips extends StatelessWidget {
   final String label;
   final bool isSelected;
   final double? height;
-  final Color? customFocusColor;
-  final double labelFontSize;
-  final VoidCallback? onTap;
-  const CustomChips(
-      {required this.label,
-      required this.isSelected,
-      this.customFocusColor,
-      this.labelFontSize = 12,
-      this.height,
-      this.onTap,
-      Key? key})
-      : super(key: key);
+  final Color? focusColor;
+  final Function()? onTap;
+
+  const CustomChips({
+    Key? key,
+    required this.label,
+    required this.isSelected,
+    this.focusColor,
+    this.height,
+    this.onTap,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 6),
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+        margin: const EdgeInsets.only(right: 10.0),
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(50),
-            color: isSelected
-                ? customFocusColor ?? ColorName.primaryColor
-                : ColorName.disabledGrey),
+          borderRadius: BorderRadius.circular(50),
+          color: isSelected
+              ? focusColor ?? ColorName.primaryColor
+              : ColorName.disabledGrey,
+        ),
         child: Center(
           child: AppText.small(
             label,
-            fontSize: labelFontSize,
-            color: isSelected
-                ? Colors.white
-                : customFocusColor ?? ColorName.darkGrey,
+            color: isSelected ? Colors.white : focusColor ?? ColorName.darkGrey,
             fontWeight: FontWeight.bold,
           ),
         ),

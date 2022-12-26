@@ -1,8 +1,14 @@
 import 'dart:ui';
 
-import 'package:flutter_card_app_ui/gen/assets.gen.dart';
-import 'package:flutter_card_app_ui/gen/colors.gen.dart';
-import 'package:flutter_card_app_ui/utilities/constant.dart';
+import '../gen/assets.gen.dart';
+import '../gen/colors.gen.dart';
+
+enum CardCategory {
+  birthday,
+  christmas,
+  general,
+  congratulation,
+}
 
 class CardModel {
   final int id;

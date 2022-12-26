@@ -1,5 +1,6 @@
-import 'package:flutter_card_app_ui/utilities/constant.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+
+import '../models/card_model.dart';
 
 part 'selected_card_category_provider.g.dart';
 

@@ -1,126 +1,41 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_card_app_ui/gen/assets.gen.dart';
-import 'package:flutter_card_app_ui/models/card_model.dart';
-import 'package:flutter_card_app_ui/providers/selected_card_provider.dart';
-import 'package:flutter_card_app_ui/providers/selected_gift_amount_provider.dart';
-import 'package:flutter_card_app_ui/screens/card_detail_input_data_screen.dart';
-import 'package:flutter_card_app_ui/utilities/app_text.dart';
-import 'package:flutter_card_app_ui/utilities/constant.dart';
-import 'package:flutter_card_app_ui/widgets/custom_card_stamp_widget.dart';
-import 'package:flutter_card_app_ui/widgets/custom_chip_widget.dart';
-import 'package:flutter_card_app_ui/widgets/custom_gift_card_widget.dart';
+import 'package:flutter_card_app_ui/widgets/custom_app_bar.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import '../gen/assets.gen.dart';
+import '../models/card_model.dart';
+import '../providers/selected_card_provider.dart';
+import '../providers/selected_gift_amount_provider.dart';
+import '../utilities/app_text.dart';
+import '../widgets/custom_chip_widget.dart';
+import '../widgets/custom_gift_card.dart';
+import 'card_detail_input_data_screen.dart';
+
 class CardDetailScreen extends ConsumerWidget {
-  const CardDetailScreen({required this.cardId, Key? key}) : super(key: key);
   final int cardId;
+
+  const CardDetailScreen({
+    Key? key,
+    required this.cardId,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final selectedCard = ref.watch(selectedCardProvider);
-    final size = MediaQuery.of(context).size;
-    final selectedCardNotifier = ref.read(selectedCardProvider.notifier);
-    final selectedGiftAmount = ref.watch(selectedGiftAmountProvider);
 
     return Scaffold(
       backgroundColor: selectedCard.value?.bgColor,
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        title: AppText.medium(
-          'Sent Card',
-          color: Colors.white,
-          fontSize: 16,
-        ),
-        centerTitle: true,
-        leading: Container(
-          margin: const EdgeInsets.all(12),
-          decoration: const BoxDecoration(
-              shape: BoxShape.circle,
-              color: Colors.white,
-              boxShadow: [
-                BoxShadow(
-                    color: Colors.black38, //New
-                    blurRadius: 5.0,
-                    offset: Offset(2, 2)),
-              ]),
-          child: IconButton(
-            icon: Assets.icon.back.svg(),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          ),
-        ),
-      ),
+      appBar: const CustomAppBar(),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Flexible(
-            child: Container(
-              height: size.height / 2,
-              padding: const EdgeInsets.all(16.0).copyWith(bottom: 0),
-              child: selectedCard.when(
-                  data: (card) => Row(
-                        children: [
-                          GestureDetector(
-                            onTap: () {
-                              selectedCardNotifier.prevCard();
-                            },
-                            child:
-                                Assets.icon.arrowleft.svg(color: Colors.white),
-                          ),
-                          Flexible(
-                            child: Container(
-                              margin:
-                                  const EdgeInsets.symmetric(horizontal: 16.0),
-                              decoration: const BoxDecoration(
-                                boxShadow: [
-                                  BoxShadow(
-                                      color: Colors.black26, //New
-                                      blurRadius: 5.0,
-                                      spreadRadius: 2,
-                                      offset: Offset(3, 3)),
-                                ],
-                              ),
-                              child: Stack(
-                                children: [
-                                  CustomGiftCard(
-                                    model: card,
-                                    width: size.width - 50,
-                                    showLabel: false,
-                                  ),
-                                  if (selectedGiftAmount != null)
-                                    Align(
-                                      alignment: Alignment.bottomCenter,
-                                      child: CustomCardStamp(
-                                          value: selectedGiftAmount),
-                                    )
-                                ],
-                              ),
-                            ),
-                          ),
-                          GestureDetector(
-                            onTap: () {
-                              selectedCardNotifier.nextCard();
-                            },
-                            child:
-                                Assets.icon.arrowright.svg(color: Colors.white),
-                          ),
-                        ],
-                      ),
-                  error: (e, s) => Center(
-                        child: AppText.medium("Card not found: $e"),
-                      ),
-                  loading: () => const Center(
-                        child: CircularProgressIndicator(),
-                      )),
-            ),
-          ),
+          const _SelectedCard(),
           const _CustomizeButton(),
           Hero(
             tag: "BottomSheet",
-            child: _GiftAmountSection(
-                model: selectedCard.value, height: size.height / 3.5),
+            child: _GiftCardValue(
+              model: selectedCard.value,
+            ),
           ),
         ],
       ),
@@ -128,86 +43,58 @@ class CardDetailScreen extends ConsumerWidget {
   }
 }
 
-class _GiftAmountSection extends ConsumerWidget {
-  final CardModel? model;
-  final double? height;
-  const _GiftAmountSection({required this.model, this.height, Key? key})
-      : super(key: key);
+class _SelectedCard extends ConsumerWidget {
+  const _SelectedCard({
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final selectedAmount = ref.watch(selectedGiftAmountProvider);
-    final isAmountSelected = selectedAmount != null;
-    final selectedCard = model;
+    final size = MediaQuery.of(context).size;
+    final selectedCard = ref.watch(selectedCardProvider);
+    final selectedCardNotifier = ref.read(selectedCardProvider.notifier);
+    final selectedGiftAmount = ref.watch(selectedGiftAmountProvider);
 
     return Container(
-      padding: const EdgeInsets.only(bottom: 10),
-      color: Colors.white,
-      width: double.infinity,
-      height: height,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          AppText.medium(
-            "Select Amount",
-            fontWeight: FontWeight.w900,
-            fontSize: 16,
-          ),
-          SizedBox(
-            height: 50,
-            child: ListView(
-                shrinkWrap: true,
-                scrollDirection: Axis.horizontal,
-                children: [
-                  const SizedBox(width: 24),
-                  ...giftValue
-                      .map((value) => CustomChips(
-                            label: value.toDollar(),
-                            isSelected: selectedAmount == value,
-                            customFocusColor: Colors.black87,
-                            labelFontSize: 16,
-                            onTap: () {
-                              ref
-                                  .read(selectedGiftAmountProvider.notifier)
-                                  .setSelectedAmount(value);
-                            },
-                          ))
-                      .toList(growable: false),
-                  const SizedBox(width: 24),
-                ]),
-          ),
-          GestureDetector(
-            onTap: isAmountSelected && selectedCard != null
-                ? () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: ((context) => CardDetailInputScreen(
-                              model: selectedCard,
-                              giftAmount: selectedAmount,
-                            )),
-                      ),
-                    );
-                  }
-                : null,
-            child: Container(
-              margin: const EdgeInsets.symmetric(horizontal: 24),
-              width: double.infinity,
-              height: 50,
-              decoration: BoxDecoration(
-                color: isAmountSelected ? Colors.black87 : Colors.grey,
-                borderRadius: BorderRadius.circular(40),
-              ),
-              child: Center(
-                child: AppText.medium(
-                  'Continue',
-                  color: Colors.white,
+      height: size.height * 0.5,
+      padding: const EdgeInsets.symmetric(vertical: 10.0),
+      child: selectedCard.when(
+        loading: () => const Center(child: CircularProgressIndicator()),
+        data: (card) => Row(
+          children: [
+            IconButton(
+              onPressed: () => selectedCardNotifier.prevCard(),
+              icon: Assets.icon.arrowleft.svg(color: Colors.white),
+            ),
+            Expanded(
+              child: Container(
+                margin: const EdgeInsets.symmetric(horizontal: 20.0),
+                decoration: const BoxDecoration(
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black26,
+                      blurRadius: 5.0,
+                      spreadRadius: 2,
+                      offset: Offset(2, 2),
+                    ),
+                  ],
+                ),
+                child: CustomGiftCard(
+                  model: card,
+                  width: size.width,
+                  value: selectedGiftAmount,
+                  showValue: selectedGiftAmount != null,
+                  showLabel: false,
                 ),
               ),
             ),
-          ),
-        ],
+            IconButton(
+              onPressed: () => selectedCardNotifier.nextCard(),
+              icon: Assets.icon.arrowright.svg(color: Colors.white),
+            ),
+          ],
+        ),
+        error: (e, s) => Center(child: AppText.medium("Card not found: $e")),
       ),
     );
   }
@@ -219,21 +106,99 @@ class _CustomizeButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+      padding: const EdgeInsets.all(15.0),
       decoration: BoxDecoration(
         color: Colors.black38,
-        borderRadius: BorderRadius.circular(40),
+        borderRadius: BorderRadius.circular(20.0),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Assets.icon.color.svg(color: Colors.white, height: 16),
-          const SizedBox(width: 12),
-          AppText.small(
-            'Customize',
-            color: Colors.white,
-            letterSpacing: 1,
-          )
+          Assets.icon.color.svg(color: Colors.white, height: 20),
+          const SizedBox(width: 10),
+          AppText.small('Customize', color: Colors.white, letterSpacing: 1)
+        ],
+      ),
+    );
+  }
+}
+
+class _GiftCardValue extends ConsumerWidget {
+  final CardModel? model;
+
+  const _GiftCardValue({
+    Key? key,
+    required this.model,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final size = MediaQuery.of(context).size;
+    final selectedAmount = ref.watch(selectedGiftAmountProvider);
+    final isAmountSelected = selectedAmount != null;
+    final selectedCard = model;
+
+    return Container(
+      padding: const EdgeInsets.only(
+        bottom: 10.0,
+        left: 20.0,
+        right: 20.0,
+      ),
+      color: Colors.white,
+      width: double.infinity,
+      height: size.height * 0.25,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          const SizedBox(height: 10),
+          AppText.medium("Select Amount", fontSize: 16),
+          SizedBox(
+            height: 50,
+            child: ListView(
+              shrinkWrap: true,
+              scrollDirection: Axis.horizontal,
+              children: [
+                ...[50, 100, 200, 500, 1000].map(
+                  (value) {
+                    return CustomChips(
+                      label: '\$$value',
+                      focusColor: Colors.black87,
+                      isSelected: selectedAmount == value,
+                      onTap: () {
+                        ref
+                            .read(selectedGiftAmountProvider.notifier)
+                            .setSelectedAmount(value);
+                      },
+                    );
+                  },
+                ).toList(),
+                const SizedBox(width: 24),
+              ],
+            ),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              isAmountSelected && selectedCard != null
+                  ? Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => CardDetailInputScreen(
+                          model: selectedCard,
+                          giftValue: selectedAmount,
+                        ),
+                      ),
+                    )
+                  : null;
+            },
+            style: ElevatedButton.styleFrom(
+              fixedSize: Size(size.width, 50),
+              backgroundColor: isAmountSelected ? Colors.black87 : Colors.grey,
+              shape: const StadiumBorder(),
+            ),
+            child: AppText.medium('Continue', color: Colors.white),
+          ),
+          const SizedBox(height: 10),
         ],
       ),
     );

@@ -6,7 +6,7 @@ import 'package:flutter_card_app_ui/utilities/app_text.dart';
 import 'package:flutter_card_app_ui/utilities/constant.dart';
 import 'package:flutter_card_app_ui/widgets/custom_arc_painter.dart';
 import 'package:flutter_card_app_ui/widgets/custom_card_stamp_widget.dart';
-import 'package:flutter_card_app_ui/widgets/custom_gift_card_widget.dart';
+import 'package:flutter_card_app_ui/widgets/custom_gift_card.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:uuid/uuid.dart';
 

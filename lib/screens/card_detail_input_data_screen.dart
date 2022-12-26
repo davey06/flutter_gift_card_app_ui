@@ -1,26 +1,26 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_card_app_ui/gen/assets.gen.dart';
-import 'package:flutter_card_app_ui/gen/colors.gen.dart';
-import 'package:flutter_card_app_ui/models/card_model.dart';
-import 'package:flutter_card_app_ui/models/payment_option_model.dart';
-import 'package:flutter_card_app_ui/providers/all_payment_method_provider.dart';
-import 'package:flutter_card_app_ui/providers/selected_payment_method_provider.dart';
-import 'package:flutter_card_app_ui/utilities/app_text.dart';
-import 'package:flutter_card_app_ui/utilities/constant.dart';
-import 'package:flutter_card_app_ui/widgets/custom_gift_card_widget.dart';
-import 'package:flutter_card_app_ui/widgets/custom_label_textfield_widget.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import '../gen/colors.gen.dart';
+import '../models/card_model.dart';
+import '../models/payment_option_model.dart';
+import '../providers/all_payment_method_provider.dart';
+import '../providers/selected_payment_method_provider.dart';
+import '../utilities/app_text.dart';
+import '../widgets/custom_app_bar.dart';
+import '../widgets/custom_gift_card.dart';
 import 'card_detail_purchased_screen.dart';
 
 class CardDetailInputScreen extends StatelessWidget {
-  static const route = 'card_detail/input';
-  const CardDetailInputScreen(
-      {required this.model, required this.giftAmount, Key? key})
-      : super(key: key);
   final CardModel model;
-  final int giftAmount;
+  final int giftValue;
+
+  const CardDetailInputScreen({
+    Key? key,
+    required this.model,
+    required this.giftValue,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -28,143 +28,132 @@ class CardDetailInputScreen extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: model.bgColor,
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        title: AppText.medium(
-          'Sent Card',
-          color: Colors.white,
-          fontSize: 16,
-        ),
-        centerTitle: true,
-        leading: Container(
-          margin: const EdgeInsets.all(12),
-          decoration: const BoxDecoration(
-              shape: BoxShape.circle,
-              color: Colors.white,
-              boxShadow: [
-                BoxShadow(
-                    color: Colors.black38, //New
-                    blurRadius: 5.0,
-                    offset: Offset(2, 2)),
-              ]),
-          child: IconButton(
-            icon: Assets.icon.back.svg(),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          ),
-        ),
-      ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Container(
-            padding: const EdgeInsets.all(16.0).copyWith(bottom: 0),
-            child: Container(
-              margin: const EdgeInsets.symmetric(horizontal: 16.0),
-              decoration: const BoxDecoration(
-                boxShadow: [
-                  BoxShadow(
-                      color: Colors.black26, //New
+      appBar: const CustomAppBar(),
+      body: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Container(
+              padding: const EdgeInsets.all(20.0),
+              child: Container(
+                height: size.height * 0.25,
+                decoration: const BoxDecoration(
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black26,
                       blurRadius: 5.0,
                       spreadRadius: 2,
-                      offset: Offset(3, 3)),
-                ],
-              ),
-              child: CustomGiftCard(
-                model: model,
-                showLabel: false,
+                      offset: Offset(2, 2),
+                    ),
+                  ],
+                ),
+                child: CustomGiftCard(
+                  model: model,
+                  showLabel: false,
+                ),
               ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8.0),
-            child: AppText.title(
-              giftAmount.toDollar(),
+            AppText.title(
+              '\$$giftValue',
               color: Colors.white,
               fontSize: 30,
               textAlign: TextAlign.center,
             ),
-          ),
-          Flexible(
-              child: Hero(
-                  tag: "BottomSheet",
-                  child: Material(
-                      borderRadius: const BorderRadius.only(
-                          topLeft: Radius.circular(20),
-                          topRight: Radius.circular(20)),
-                      child:
-                          _GiftRecipientSection(height: size.height * 2 / 3)))),
-        ],
-      ),
-    );
-  }
-}
-
-class _GiftRecipientSection extends ConsumerWidget {
-  final double? height;
-  const _GiftRecipientSection({this.height, Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return Container(
-      padding: const EdgeInsets.only(left: 24, right: 24, top: 16, bottom: 10),
-      decoration: const BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(20), topRight: Radius.circular(20))),
-      width: double.infinity,
-      height: height,
-      child: SingleChildScrollView(
-        physics: const BouncingScrollPhysics(),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            const SizedBox(height: 8),
-            const CustomLabelTextFieldWidget(
-                label: 'Recipient', placeholder: 'name'),
-            const CustomLabelTextFieldWidget(
-                label: 'Email', placeholder: 'email'),
-            const CustomLabelTextFieldWidget(
-                label: 'Message', placeholder: 'message', maxLine: 4),
-            const SizedBox(height: 8),
-            const _PaymentMethods(),
-            const SizedBox(height: 32),
-            GestureDetector(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: ((context) => const CardPurchasedScreen()),
-                  ),
-                );
-              },
-              child: Container(
-                width: double.infinity,
-                height: 50,
-                decoration: BoxDecoration(
-                  color: Colors.black87,
-                  borderRadius: BorderRadius.circular(40),
-                ),
-                child: Center(
-                  child: AppText.medium(
-                    'Continue',
-                    color: Colors.white,
-                  ),
+            const SizedBox(height: 20),
+            Container(
+              padding: const EdgeInsets.all(20.0),
+              decoration: const BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(20),
+                  topRight: Radius.circular(20),
                 ),
               ),
-            ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  const SizedBox(height: 10),
+                  _buildTextFormField('Recipient', 'name'),
+                  const SizedBox(height: 10),
+                  _buildTextFormField('Email', 'email'),
+                  const SizedBox(height: 10),
+                  _buildTextFormField('Message', 'message', maxLines: 4),
+                  const SizedBox(height: 10),
+                  const _PaymentMethods(),
+                  const SizedBox(height: 32),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: ((context) => const CardPurchasedScreen()),
+                        ),
+                      );
+                    },
+                    child: Container(
+                      width: double.infinity,
+                      height: 50,
+                      decoration: BoxDecoration(
+                        color: Colors.black87,
+                        borderRadius: BorderRadius.circular(40),
+                      ),
+                      child: Center(
+                        child: AppText.medium(
+                          'Continue',
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            )
           ],
         ),
       ),
     );
   }
+
+  Column _buildTextFormField(String label, String hintText, {int? maxLines}) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        AppText.medium(
+          label,
+          color: Colors.black87,
+          fontSize: 16,
+          fontWeight: FontWeight.bold,
+        ),
+        const SizedBox(height: 10.0),
+        TextFormField(
+          style: const TextStyle(
+            fontWeight: FontWeight.bold,
+            color: ColorName.primaryColor,
+            fontSize: 14,
+          ),
+          decoration: InputDecoration(
+            filled: true,
+            fillColor: ColorName.lightGrey,
+            hintText: hintText,
+            hintStyle: const TextStyle(color: Colors.grey),
+            contentPadding: const EdgeInsets.all(20.0),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(20.0),
+              borderSide: BorderSide.none,
+            ),
+          ),
+          maxLines: maxLines ?? 1,
+        ),
+      ],
+    );
+  }
 }
 
 class _PaymentMethods extends ConsumerWidget {
-  const _PaymentMethods({Key? key}) : super(key: key);
+  const _PaymentMethods({
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
